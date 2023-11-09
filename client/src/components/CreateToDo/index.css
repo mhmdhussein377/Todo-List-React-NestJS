@@ -1,0 +1,33 @@
+.create-todo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.create-todo form {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
+    max-width: 650px;
+    padding: 30px;
+    background-color: white;
+}
+
+.create-todo form .inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.create-todo form .inputs .w-50 {
+    display: flex;
+    gap: 1.25rem;
+}

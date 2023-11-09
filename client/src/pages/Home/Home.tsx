@@ -4,6 +4,7 @@ import { FC } from "react"
 import ToDos from "../../components/ToDos/ToDos"
 import {AiOutlinePlus} from "react-icons/ai"
 import {GiBackwardTime} from "react-icons/gi"
+import CreateToDo from "../../components/CreateToDo/CreateToDo"
 
 const Home: FC = () => {
     return (
@@ -20,6 +21,7 @@ const Home: FC = () => {
                     <AiOutlinePlus size={25} color="white" />
                 </div>
             </div>
+            <CreateToDo />
         </div>
     )
 }
