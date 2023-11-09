@@ -1,4 +1,5 @@
 import ToDo from "../ToDo/ToDo"
+import "./index.css"
 
 const ToDos = () => {
     return (

@@ -1,0 +1,34 @@
+.home-screen .todos-section {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    max-width: 800px;
+    margin: 5rem auto 1.875rem;
+}
+
+.home-screen .buttons {
+    position: sticky;
+    bottom: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-right: 80px;
+}
+
+.home-screen .buttons .circular-button {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    background-color: var(--main-color);
+    font-weight: 600;
+    font-size: 1.125rem;
+    cursor: pointer;
+}
