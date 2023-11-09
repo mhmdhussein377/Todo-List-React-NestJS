@@ -1,10 +1,11 @@
+import { FC } from "react"
 import "./index.css"
 
 import {BiSolidPencil} from "react-icons/bi"
 import {BsTrashFill} from "react-icons/bs"
 import {PiFlagPennantFill} from "react-icons/pi"
 
-const ToDo = () => {
+const ToDo: FC = () => {
     return (
         <div className="todo">
             <div>

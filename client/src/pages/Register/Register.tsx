@@ -1,8 +1,9 @@
 import SubmitButton from "../../components/UI/SubmitButton/SubmitButton";
 import Input from "../../components/UI/Input/Input";
 import "./index.css";
+import { FC } from "react";
 
-const Register = () => {
+const Register: FC = () => {
   return (
     <div className="register-screen">
       <form>

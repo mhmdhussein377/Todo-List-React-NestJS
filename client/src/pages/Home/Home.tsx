@@ -1,11 +1,11 @@
 import "./index.css"
+import { FC } from "react"
 
 import ToDos from "../../components/ToDos/ToDos"
 import {AiOutlinePlus} from "react-icons/ai"
 import {GiBackwardTime} from "react-icons/gi"
 
-
-const Home = () => {
+const Home: FC = () => {
     return (
         <div className="home-screen">
             <div className="todos-section">

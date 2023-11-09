@@ -1,8 +1,9 @@
+import { FC } from "react";
 import SubmitButton from "../../components/UI/SubmitButton/SubmitButton";
 import Input from "../../components/UI/Input/Input";
 import "./index.css";
 
-const Login = () => {
+const Login: FC = () => {
   return (
     <div className="login-screen">
       <form>
