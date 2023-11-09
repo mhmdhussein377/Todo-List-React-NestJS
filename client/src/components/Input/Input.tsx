@@ -10,7 +10,7 @@ interface InputProps {
 
 const Input : FC<InputProps> = ({label, type, placeholder, name}) => {
     return (
-        <div className="input">
+        <div className="input-container">
             <label htmlFor={name}>{label}</label>
             <input id={name} type={type} placeholder={placeholder} name={name}/>
         </div>

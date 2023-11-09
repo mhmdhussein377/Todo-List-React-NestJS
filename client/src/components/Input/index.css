@@ -1,0 +1,24 @@
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.input-container label {
+    font-size: 1.15rem;
+}
+
+.input-container input {
+    font-size: 1rem;
+    padding: 10px 12px;
+    border: 2px solid #1242f085;
+    outline: none;
+}
+
+.input-container input:placeholder-shown {
+    font-size: 1rem;
+}
+
+.input-container input:focus {
+    border: 2px solid #1243f0;;
+}

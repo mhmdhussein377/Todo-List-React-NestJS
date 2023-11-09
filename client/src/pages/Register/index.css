@@ -1,0 +1,22 @@
+.register-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color:  #1242f085;
+}
+
+.register-screen > form {
+    width: 420px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    background-color: white;
+}
+
+.register-screen > form .inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

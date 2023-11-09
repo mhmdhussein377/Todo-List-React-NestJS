@@ -1,10 +1,12 @@
+import SubmitButton from "../../components/Button/SubmitButton"
 import Input from "../../components/Input/Input"
+import "./index.css"
 
 const Register = () => {
 
     return (
         <div className="register-screen">
-            <form className="box">
+            <form>
                 <div className="inputs">
                     <Input label="Name" type="text" placeholder="Enter your name" name="name"/>
                     <Input label="Email" type="email" placeholder="Enter your email" name="email"/>
@@ -14,7 +16,7 @@ const Register = () => {
                         placeholder="Enter your password"
                         name="password"/>
                 </div>
-                <button>Register</button>
+                <SubmitButton content="Register" />
             </form>
         </div>
     )
