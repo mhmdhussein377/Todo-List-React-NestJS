@@ -1,17 +1,13 @@
-import { Route, Routes } from "react-router-dom"
-import Register from "./pages/Register/Register"
-import Login from "./pages/Login/Login"
-import Home from "./pages/Home/Home"
+import {Route, Routes} from "react-router-dom"
+import { routes } from "./utils/Route"
 
 function App() {
 
-  return (
-    <Routes>
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/" element={<Home />} />
-    </Routes>
-  )
+    return (
+        <Routes>
+            {routes.map(({path, element}, index) => (<Route key={index} path={path} element={element}/>))}
+        </Routes>
+    )
 }
 
 export default App
