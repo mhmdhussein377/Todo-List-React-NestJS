@@ -14,6 +14,28 @@ export class AuthService {
         private jwtService : JwtService, 
         private readonly userService : UserService) {}
 
+    async login(loginDto: LoginDto) : Promise<any> {
+        const {email, password} = loginDto
+
+        const user = await this.prismaService.user.findUnique({
+            where: {email}
+        })
+
+        if(!user) {
+            throw new NotFoundException("User not found")
+        }
+
+        const validatePassword = await bcrypt.compare(password, user.password)
+
+        if(!validatePassword) {
+            throw new NotFoundException("Invalid password")
+        }
+
+        return {
+            token: this.jwtService.sign({id: user.id})
+        }
+    }
+
     async register (createDto: RegisterUserDto) : Promise<any> {
 
         const createdUser = new User()
