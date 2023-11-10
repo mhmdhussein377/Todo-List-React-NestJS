@@ -1,8 +1,8 @@
 import "./index.css"
 
-const CircularButton = ({icon}) => {
+const CircularButton = ({icon, onClick}) => {
     return (
-        <div className="circular-button">
+        <div onClick={onClick} className="circular-button">
             {icon}
         </div>
     )
