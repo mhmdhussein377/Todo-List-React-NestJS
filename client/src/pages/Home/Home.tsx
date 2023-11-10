@@ -21,7 +21,7 @@ const Home: FC = () => {
                     <AiOutlinePlus size={25} color="white" />
                 </div>
             </div>
-            <CreateToDo />
+            {/* <CreateToDo /> */}
         </div>
     )
 }
