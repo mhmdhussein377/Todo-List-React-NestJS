@@ -1,52 +1,78 @@
-import {Injectable, NotFoundException} from "@nestjs/common";
-import {JwtService} from "@nestjs/jwt";
-import {PrismaService} from "src/prisma.service";
-import {UserService} from "src/user/users.service";
-import { LoginDto } from "./dto/login-user.dto";
-import * as bcrypt from "bcrypt"
-import { RegisterUserDto } from "./dto/register-user.dto";
-import { User } from "src/user/user.model";
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from 'prisma/prisma.service';
+import { UserService } from 'src/user/users.service';
+import { LoginDto } from './dto/login-user.dto';
+import * as bcrypt from 'bcrypt';
+import { RegisterUserDto } from './dto/register-user.dto';
+import { User } from 'src/user/user.model';
 
 @Injectable()
 export class AuthService {
-    constructor(
-        private readonly prismaService : PrismaService, 
-        private jwtService : JwtService, 
-        private readonly userService : UserService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private jwtService: JwtService,
+    private readonly userService: UserService,
+  ) {}
 
-    async login(loginDto: LoginDto) : Promise<any> {
-        const {email, password} = loginDto
+  async login(dto: LoginDto): Promise<any> {
+    const {email, password} = dto
 
-        const user = await this.prismaService.user.findUnique({
-            where: {email}
-        })
+    const existedUser = await this.prismaService.user.findUnique({where: {email}})
 
-        if(!user) {
-            throw new NotFoundException("User not found")
-        }
-
-        const validatePassword = await bcrypt.compare(password, user.password)
-
-        if(!validatePassword) {
-            throw new NotFoundException("Invalid password")
-        }
-
-        return {
-            token: this.jwtService.sign({id: user.id})
-        }
+    if(!existedUser) {
+        throw new BadRequestException("Wrong credentials")
     }
 
-    async register (createDto: RegisterUserDto) : Promise<any> {
+    const isMatch = await this.validatePassword({password, hashedPassword: existedUser.password})
 
-        const createdUser = new User()
-        createdUser.name = createdUser.name
-        createdUser.email = createdUser.email
-        createdUser.password = await bcrypt.hash(createDto.password, 10)
-
-        const user = await this.userService.createUser(createdUser)
-
-        return {
-            token: this.jwtService.sign({id: user.id})
-        }
+    if(!isMatch) {
+        throw new BadRequestException("Wrong credentials")
     }
+
+    const token = await this.signToken({id: existedUser.id, email: existedUser.email})
+    
+    return {token};
+  }
+
+  async register(dto: RegisterUserDto): Promise<any> {
+    const {name, email, password} = dto
+
+    const existedUser = await this.prismaService.user.findUnique({where: {email}})
+
+    if(existedUser) {
+        throw new BadRequestException("Email already exists")
+    }
+
+    const hashedPassword = await this.hashPassword(password)
+
+    await this.prismaService.user.create({
+        data: {
+            name,
+            email,
+            password: hashedPassword
+        }
+    })
+
+    return { message: 'Signup was successfull' };
+  }
+
+  async signout(): Promise<any> {
+    return { message: 'Signout was successful' };
+  }
+
+  async hashPassword(password: string) {
+    const saltOrRounds = 10
+    return await bcrypt.hash(password, saltOrRounds)
+  }
+
+  async validatePassword(args: {password: string, hashedPassword: string}) {
+    return await bcrypt.compare(args.password, args.hashedPassword)
+  }
+
+  async signToken(args: {id: number, email: string}) {
+    const payload = args
+
+    return this.jwtService.signAsync(payload, {secret: process.env.JWT_SECRET})
+  }
 }

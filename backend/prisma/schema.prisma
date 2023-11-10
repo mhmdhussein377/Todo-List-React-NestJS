@@ -15,7 +15,7 @@ model User {
   name     String   @db.VarChar(100)
   email    String   @unique @db.VarChar(45)
   password String   @db.VarChar(100)
-  todos    Todo[]
+  // todos    Todo[]
 
   @@map("users")
 }
@@ -27,7 +27,7 @@ model Todo {
   completed Boolean
   createdAt DateTime @default(now())
   userId      Int
-  user        User    @relation(fields: [userId], references: [id])
+  // user        User    @relation(fields: [userId], references: [id])
 
   @@map("todos")
 }
