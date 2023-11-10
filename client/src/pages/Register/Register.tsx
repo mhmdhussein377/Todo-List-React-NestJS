@@ -32,11 +32,8 @@ const Register : FC = () => {
     const navigate = useNavigate()
 
     const handleInputChange = (name: string, value: string) => {
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        [name]: value,
-      }));
-    };
+      setInputs(prev => ({...prev, [name]: value}))
+    }
 
     const handleSubmit = async (event : React.FormEvent) => {
       event.preventDefault()
@@ -59,6 +56,7 @@ const Register : FC = () => {
                         key={name}
                         label={label}
                         type={type}
+                        value={inputs[name] || ""}
                         placeholder={placeholder}
                         name={name}
                         onChange={e => handleInputChange(name, e.target.value)}/>

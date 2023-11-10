@@ -4,17 +4,18 @@ import "./index.css"
 interface InputProps {
     label : string;
     type : string;
+    value: string;
     placeholder : string;
     name : string;
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input : FC<InputProps> = ({label, type, placeholder, name, onChange}) => {
+const Input : FC<InputProps> = ({label, type, value, placeholder, name, onChange}) => {
 
     return (
         <div className="input-container">
             <label htmlFor={name}>{label}</label>
-            <input id={name} onChange={onChange} type={type} placeholder={placeholder} name={name}/>
+            <input id={name} onChange={onChange} value={value} type={type} placeholder={placeholder} name={name}/>
         </div>
     )
 }
