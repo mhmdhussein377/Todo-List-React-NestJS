@@ -54,7 +54,7 @@ export class AuthService {
         }
     })
 
-    return { message: 'Signup was successfull' };
+    return { status: 200, message: 'Signup was successfull' };
   }
 
   async signout(): Promise<any> {

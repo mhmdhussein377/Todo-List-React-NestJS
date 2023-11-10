@@ -1,4 +1,4 @@
-import {FC} from "react"
+import {ChangeEvent, FC} from "react"
 import "./index.css"
 
 interface InputProps {
@@ -6,13 +6,15 @@ interface InputProps {
     type : string;
     placeholder : string;
     name : string;
+    onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input : FC<InputProps> = ({label, type, placeholder, name}) => {
+const Input : FC<InputProps> = ({label, type, placeholder, name, onChange}) => {
+
     return (
         <div className="input-container">
             <label htmlFor={name}>{label}</label>
-            <input id={name} type={type} placeholder={placeholder} name={name}/>
+            <input id={name} onChange={onChange} type={type} placeholder={placeholder} name={name}/>
         </div>
     )
 }
