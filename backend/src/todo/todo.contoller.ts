@@ -40,4 +40,11 @@ export class TodoController {
         const userId = (req.user as User).id;
         return this.todoService.deleteTodo(userId, parseInt(id, 10));
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('all')
+    getAllTodosForUser(@Req() req): Promise<Todo[]> {
+        const userId = (req.user as User).id;
+        return this.todoService.getUserTodos(userId);
+    }
 }

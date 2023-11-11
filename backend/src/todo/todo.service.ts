@@ -24,9 +24,13 @@ export class TodoService {
 
     async updateTodo(userId : number, todoId : number, updateTodoDto : UpdateTodoDto) : Promise < {
         status: number;
-        message: string} | Todo > {
+        message: string
+    } | Todo > {
         try {
-            const todo = await this.prismaService.todo.findUnique({
+            const todo = await this
+                .prismaService
+                .todo
+                .findUnique({
                     where: {
                         id: todoId
                     }
@@ -40,7 +44,10 @@ export class TodoService {
                 return {status: 401, message: 'You are not authorized to update this todo'};
             }
 
-            const updatedTodo = await this.prismaService.todo.update({
+            const updatedTodo = await this
+                .prismaService
+                .todo
+                .update({
                     where: {
                         id: todoId
                     },
@@ -88,5 +95,25 @@ export class TodoService {
         } catch (error) {
             return {status: 500, message: "Internal server error"}
         }
+    }
+
+    async getUserTodos(userId : number) : Promise < Todo[] > {
+        const user = await this
+            .prismaService
+            .user
+            .findUnique({
+                where: {
+                    id: userId
+                },
+                include: {
+                    todos: true
+                }
+            });
+
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        return user.todos;
     }
 }
