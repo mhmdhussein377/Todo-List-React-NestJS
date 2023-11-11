@@ -1,5 +1,5 @@
-import {Priority} from '@prisma/client';
-import {IsNotEmpty, IsBoolean, IsString, IsEnum, IsDate} from 'class-validator';
+import { Priority } from '@prisma/client';
+import {IsNotEmpty, IsBoolean, IsString, IsEnum, IsISO8601} from 'class-validator';
 
 export class CreateTodoDto {
     @IsNotEmpty()
@@ -11,9 +11,10 @@ export class CreateTodoDto {
     completed : boolean;
 
     @IsNotEmpty()
+    @IsISO8601()
     date: Date;
 
     @IsNotEmpty()
-    @IsEnum(Priority)
+    @IsEnum(Priority, {each: true})
     priority : Priority;
 }
