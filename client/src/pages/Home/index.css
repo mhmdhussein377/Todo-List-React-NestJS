@@ -1,6 +1,7 @@
 .home-screen {
     background-color: #1242f050;
     padding: 0 20px;
+    min-height: 100vh;
 }
 
 .home-screen .todos-section {
@@ -13,10 +14,11 @@
     padding: 5rem  0 1.875rem;
 }
 
-.home-screen .action-buttons {
-    position: sticky;
-    bottom: 80px;
+.home-screen > .action-buttons {
+    position: fixed;
     display: flex;
+    bottom: 40px;
+    right: 40px;
     align-items: center;
     justify-content: flex-end;
     gap: 15px;

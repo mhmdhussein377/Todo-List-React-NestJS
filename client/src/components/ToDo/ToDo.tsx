@@ -1,30 +1,37 @@
-import { FC } from "react"
+import {FC} from "react"
 import "./index.css"
 
 import {BiSolidPencil} from "react-icons/bi"
 import {BsTrashFill} from "react-icons/bs"
-import {PiFlagPennantFill} from "react-icons/pi"
-import { Todo } from "../../utils/types"
+import {BsCheckSquare} from "react-icons/bs"
+import {BsCheckSquareFill} from "react-icons/bs"
+import {Todo} from "../../utils/types"
 
-interface  ToDoProps {
-    todo: Todo
+type ToDoProps = {
+    todo: Todo;
+    setIsDeleteTodoModalOpened: (value : boolean) => void;
+    setDeleteTodoId: () => void;
 }
 
-const ToDo: FC<ToDoProps> = ({todo}) => {
+const ToDo : FC < ToDoProps > = ({todo, setIsDeleteTodoModalOpened, setDeleteTodoId}) => {
 
-    const {priority, description} = todo
+    const {priority, description, completed, id} = todo
 
     return (
         <div className="todo">
             <div>
                 <div className="priority">{priority.toLowerCase()}</div>
-                <div><PiFlagPennantFill size={25} color="black" /></div>
+                <div>{completed
+                        ? <BsCheckSquareFill size={28} color="black"/>
+                        : <BsCheckSquare size={28} color="black"/>}</div>
             </div>
             <div>
                 <div className="content">{description}</div>
                 <div className="icons">
-                    <BiSolidPencil size={25} color="black" />
-                    <BsTrashFill size={25} color="black" />
+                    <BiSolidPencil size={25} color="black"/>
+                    <div onClick={() => {setIsDeleteTodoModalOpened(true); setDeleteTodoId(id)}}>
+                        <BsTrashFill size={25} color="black"/>
+                    </div>
                 </div>
             </div>
         </div>

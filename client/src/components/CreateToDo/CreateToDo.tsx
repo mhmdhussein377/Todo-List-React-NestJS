@@ -2,14 +2,13 @@ import "./index.css"
 
 import {FC, useRef, useState} from 'react'
 import Input from '../UI/Input/Input'
-import SubmitButton from '../UI/SubmitButton/SubmitButton'
 import DatePicker from "react-datepicker";
 import SelectSearch from "react-select-search"
 
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-select-search/style.css'
-import axios from "axios";
 import {postRequest} from "../../utils/requests";
+import Button from "../UI/Button/Button";
 
 interface propsType {
     setIsCreateTodoModalOpened : React.Dispatch < React.SetStateAction < boolean >>;
@@ -49,8 +48,7 @@ const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened}) => {
     }
 
     const closeModal = (event : React.MouseEvent < HTMLDivElement >) => {
-        if (!formRef.current
-            ?.contains(event.target as HTMLDivElement)) 
+        if (!formRef.current?.contains(event.target as HTMLDivElement)) 
             setIsCreateTodoModalOpened(false)
     }
 
@@ -121,7 +119,7 @@ const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened}) => {
                         </div>
                     </div>
                 </div>
-                <SubmitButton content='Create'/>
+                <Button content='Create'/>
             </form>
         </div>
     )

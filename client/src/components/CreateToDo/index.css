@@ -49,12 +49,6 @@
     background-color: unset !important;
 }
 
-.create-todo .priority label + * {
-    color: unset;
-    background-color: unset !important;
-    background-color: red !important;
-}
-
 .create-todo .error {
     color: red;
 }

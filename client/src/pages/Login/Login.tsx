@@ -1,9 +1,9 @@
 import {FC, useState} from "react";
-import SubmitButton from "../../components/UI/SubmitButton/SubmitButton";
 import Input from "../../components/UI/Input/Input";
 import "./index.css";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import Button from "../../components/UI/Button/Button";
 
 const inputFields = [
     {
@@ -58,7 +58,7 @@ const Login : FC = () => {
                         required={true}
                         onChange={e => handleInputChange(name, e.target.value)}/>))}
                 </div>
-                <SubmitButton content="Login"/>
+                <Button content="Login"/>
             </form>
         </div>
     );

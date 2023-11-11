@@ -11,4 +11,5 @@ export type Todo = {
 export type ToDosProps = {
     date: string;
     todos: Todo[];
+    setIsDeleteTodoModalOpened: (value: boolean) => void
 };
