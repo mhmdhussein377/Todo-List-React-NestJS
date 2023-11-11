@@ -9,8 +9,8 @@ export class AuthController {
     constructor(private  readonly authService: AuthService){}
 
     @Post("login")
-    login(@Body() dto: LoginDto) {
-        return this.authService.login(dto)
+    login(@Body() dto: LoginDto, @Req() req, @Res() res) {
+        return this.authService.login(dto, req, res)
     }
 
     @Post("register")
@@ -19,7 +19,7 @@ export class AuthController {
     }
 
     @Get("signout")
-    signout() {
-        return this.authService.signout()
+    signout(@Req() req, @Res() res) {
+        return this.authService.signout(req, res)
     }
 }

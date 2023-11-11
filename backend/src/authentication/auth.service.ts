@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'prisma/prisma.service';
 import { UserService } from 'src/user/users.service';
@@ -6,6 +6,7 @@ import { LoginDto } from './dto/login-user.dto';
 import * as bcrypt from 'bcrypt';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { User } from 'src/user/user.model';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async login(dto: LoginDto): Promise<any> {
+  async login(dto: LoginDto, req: Request, res: Response): Promise<any> {
     const {email, password} = dto
 
     const existedUser = await this.prismaService.user.findUnique({where: {email}})
@@ -32,7 +33,13 @@ export class AuthService {
 
     const token = await this.signToken({id: existedUser.id, email: existedUser.email})
     
-    return {token};
+    if(!token) {
+      throw new ForbiddenException()
+    }
+
+    res.cookie('token', token)
+
+    return res.send({message: 'Logged in successfully'})
   }
 
   async register(dto: RegisterUserDto): Promise<any> {
@@ -57,8 +64,9 @@ export class AuthService {
     return { status: 200, message: 'Signup was successfull' };
   }
 
-  async signout(): Promise<any> {
-    return { message: 'Signout was successful' };
+  async signout(req: Request, res: Response): Promise<any> {
+    res.clearCookie("token")
+    return res.send({message: "Logged out successfully"})
   }
 
   async hashPassword(password: string) {
@@ -73,6 +81,6 @@ export class AuthService {
   async signToken(args: {id: number, email: string}) {
     const payload = args
 
-    return this.jwtService.signAsync(payload, {secret: process.env.JWT_SECRET, expiresIn: "1h"})
+    return this.jwtService.sign(payload, {secret: process.env.JWT_SECRET, expiresIn: "1h"})
   }
 }
