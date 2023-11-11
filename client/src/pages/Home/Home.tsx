@@ -58,7 +58,9 @@ const Home : FC = () => {
         setIsCreateTodoModalOpened(true)
     }
 
-    const handleSortByTime = () => {}
+    const handleSortByTime = () => {
+
+    }
 
     const circularButtons = [
         {
@@ -82,7 +84,7 @@ const Home : FC = () => {
                         date={date}
                         todos={tasksForDate as Todo[]}
                         setIsDeleteTodoModalOpened={setIsDeleteTodoModalOpened}
-                        setDeleteTodoId={setDeleteTodoId}/>)).reverse()}
+                        setDeleteTodoId={setDeleteTodoId}/>))}
             </div>
             <div className="action-buttons">
                 {circularButtons.map(({id, icon, handleClick}) => (<CircularButton key={id} onClick={handleClick} icon={icon}/>))}
