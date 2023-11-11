@@ -31,3 +31,26 @@
     display: flex;
     gap: 1.25rem;
 }
+
+.create-todo .date {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 100%;
+}
+
+.create-todo .date > * {
+    min-width: 100% !important;
+}
+
+.create-todo .priority {
+    height: 100%;
+    background-color: unset !important;
+}
+
+.create-todo .priority label + * {
+    color: unset;
+    background-color: unset !important;
+    background-color: red !important;
+}
