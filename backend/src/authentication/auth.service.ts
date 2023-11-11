@@ -39,7 +39,7 @@ export class AuthService {
 
     res.cookie('token', token)
 
-    return res.send({message: 'Logged in successfully'})
+    return res.send({message: 'Logged in successfully', token})
   }
 
   async register(dto: RegisterUserDto): Promise<any> {
@@ -81,6 +81,6 @@ export class AuthService {
   async signToken(args: {id: number, email: string}) {
     const payload = args
 
-    return this.jwtService.sign(payload, {secret: process.env.JWT_SECRET, expiresIn: "1h"})
+    return this.jwtService.sign(payload, {secret: process.env.JWT_SECRET})
   }
 }

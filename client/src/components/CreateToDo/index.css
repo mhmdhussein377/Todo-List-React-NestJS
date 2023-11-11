@@ -54,3 +54,7 @@
     background-color: unset !important;
     background-color: red !important;
 }
+
+.create-todo .error {
+    color: red;
+}

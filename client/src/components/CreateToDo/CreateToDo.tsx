@@ -8,6 +8,8 @@ import SelectSearch from "react-select-search"
 
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-select-search/style.css'
+import axios from "axios";
+import {postRequest} from "../../utils/requests";
 
 interface propsType {
     setIsCreateTodoModalOpened : React.Dispatch < React.SetStateAction < boolean >>;
@@ -22,22 +24,21 @@ export type InputsType = {
 const options = [
     {
         name: 'Low',
-        value: 'sv'
+        value: 'LOW'
     }, {
         name: 'Medium',
-        value: 'en'
+        value: 'MEDIUM'
     }, {
         name: "High",
-        value: "High"
+        value: "HIGH"
     }
 ];
 
 const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened}) => {
 
     const [inputs,
-        setInputs] = useState({description: "", date: "", priority: ""})
-    const [startDate,
-        setStartDate] = useState(new Date());
+        setInputs] = useState({description: "", date: new Date(), priority: "LOW"})
+    const [error, setError] = useState(false)
     const formRef = useRef < HTMLFormElement > (null)
 
     const handleChange = (name : string, value : string) => {
@@ -53,9 +54,49 @@ const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened}) => {
             setIsCreateTodoModalOpened(false)
     }
 
+    const handlePriorityChange = (newValue : string) : void => {
+        setInputs(prev => ({
+            ...prev,
+            priority: newValue
+        }))
+    }
+
+    const handleDateChange = (newDate) : void => {
+        setInputs(prev => ({
+            ...prev,
+            date: newDate
+        }))
+    }
+
+    const handleCreateTodo = async(e : React.FormEvent) => {
+        e.preventDefault()
+
+        if(!inputs.description) {
+            setError(true)
+            setTimeout(() => {
+                setError(false)
+            }, 3000)
+            return
+        }
+
+        try {
+
+            const response = await postRequest("/todos/create", {
+                ...inputs,
+                date: inputs.date.toISOString(),
+                completed: false
+            })
+
+            response && setIsCreateTodoModalOpened(false)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div className='create-todo' onClick={closeModal}>
-            <form ref={formRef}>
+            <form ref={formRef} onSubmit={handleCreateTodo}>
                 <div className="inputs">
                     <Input
                         type='text'
@@ -64,22 +105,20 @@ const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened}) => {
                         onChange={e => handleChange("description", e.target.value)}
                         value={inputs["description"] || ""}
                         placeholder='Enter a description'/>
+                    {error && <p className="error">Description is required</p>}
                     <div className="w-50">
                         <div className="input-container date">
                             <label htmlFor="date">Date</label>
-                            <DatePicker selected={startDate} onChange={(date) => setStartDate(date)}/>
+                            <DatePicker selected={inputs.date} onChange={(date) => handleDateChange(date)}/>
                         </div>
                         <div className="input-container priority">
                             <label htmlFor="priority">Priority</label>
-                            <SelectSearch options={options} value="sv" placeholder="Low"/>
+                            <SelectSearch
+                                onChange={(newValue : string) => handlePriorityChange(newValue)}
+                                options={options}
+                                value={inputs.priority}
+                                placeholder="Low"/>
                         </div>
-                        {/* <Input
-                            type='text'
-                            value={inputs["priority"] || ""}
-                            onChange={e => handleChange("priority", e.target.value)}
-                            label='Priority'
-                            name='priority'
-                            placeholder='Low'/> */}
                     </div>
                 </div>
                 <SubmitButton content='Create'/>

@@ -2,8 +2,8 @@ import {FC, useState} from "react";
 import SubmitButton from "../../components/UI/SubmitButton/SubmitButton";
 import Input from "../../components/UI/Input/Input";
 import "./index.css";
-import { postRequest } from "../../utils/requests";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
 const inputFields = [
     {
@@ -25,15 +25,24 @@ const Login : FC = () => {
     const navigate = useNavigate()
 
     const handleInputChange = (name : string, value : string) => {
-        setInputs(prev => ({...prev, [name]: value}))
+        setInputs(prev => ({
+            ...prev,
+            [name]: value
+        }))
     }
 
-    const handleSubmit = async (event: React.FormEvent) => {
-      event.preventDefault()
+    const handleSubmit = async(event : React.FormEvent) => {
+        event.preventDefault()
 
-      const response = await postRequest("/auth/login", inputs)
-      response && navigate("/")
-    } 
+        try {
+            const response = await axios.post("/auth/login", inputs)
+
+            response && localStorage.setItem("authToken", response.data.token)
+            response && navigate("/")
+        } catch (error) {
+            console.error("Login failed:", error)
+        }
+    }
 
     return (
         <div className="login-screen">
@@ -46,6 +55,7 @@ const Login : FC = () => {
                         value={inputs[name] || ""}
                         placeholder={placeholder}
                         name={name}
+                        required={true}
                         onChange={e => handleInputChange(name, e.target.value)}/>))}
                 </div>
                 <SubmitButton content="Login"/>

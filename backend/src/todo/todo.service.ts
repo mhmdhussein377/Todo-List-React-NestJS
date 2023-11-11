@@ -9,10 +9,7 @@ export class TodoService {
     constructor(private readonly prismaService : PrismaService) {}
 
     async createTodo(userId : number, createTodoDto : CreateTodoDto) : Promise < Todo > {
-        const todo = await this
-            .prismaService
-            .todo
-            .create({
+        const todo = await this.prismaService.todo.create({
                 data: {
                     ...createTodoDto,
                     userId
