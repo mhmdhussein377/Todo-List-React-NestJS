@@ -95,10 +95,7 @@ export class TodoService {
     }
 
     async getUserTodos(userId : number) : Promise < Todo[] > {
-        const user = await this
-            .prismaService
-            .user
-            .findUnique({
+        const user = await this.prismaService.user.findUnique({
                 where: {
                     id: userId
                 },

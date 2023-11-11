@@ -43,7 +43,7 @@ export class TodoController {
 
     @UseGuards(JwtAuthGuard)
     @Get('all')
-    getAllTodosForUser(@Req() req): Promise<Todo[]> {
+    getAllTodosForUser(@Req() req): Promise<Todo[] | null> {
         const userId = (req.user as User).id;
         return this.todoService.getUserTodos(userId);
     }

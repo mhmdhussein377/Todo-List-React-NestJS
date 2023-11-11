@@ -4,16 +4,24 @@ import "./index.css"
 import {BiSolidPencil} from "react-icons/bi"
 import {BsTrashFill} from "react-icons/bs"
 import {PiFlagPennantFill} from "react-icons/pi"
+import { Todo } from "../../utils/types"
 
-const ToDo: FC = () => {
+interface  ToDoProps {
+    todo: Todo
+}
+
+const ToDo: FC<ToDoProps> = ({todo}) => {
+
+    const {priority, description} = todo
+
     return (
         <div className="todo">
             <div>
-                <div className="priority">Low</div>
+                <div className="priority">{priority.toLowerCase()}</div>
                 <div><PiFlagPennantFill size={25} color="black" /></div>
             </div>
             <div>
-                <div className="content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet odio corporis inventore doloribus assumenda voluptas esse blanditiis unde molestias placeat, eaque dolore libero nisi pariatur non praesentium repellat. Ex, non?</div>
+                <div className="content">{description}</div>
                 <div className="icons">
                     <BiSolidPencil size={25} color="black" />
                     <BsTrashFill size={25} color="black" />
