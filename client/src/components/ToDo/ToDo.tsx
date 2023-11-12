@@ -12,9 +12,11 @@ type ToDoProps = {
     todo: Todo;
     setIsDeleteTodoModalOpened: (value : boolean) => void;
     setDeleteTodoId: (id: number) => void;
+    setIsUpdateTodoModalOpened: (value: boolean) => void;
+    setUpdatedTodo: (todo: Todo) => void;
 }
 
-const ToDo : FC < ToDoProps > = ({todo, setIsDeleteTodoModalOpened, setDeleteTodoId}) => {
+const ToDo : FC < ToDoProps > = ({todo, setIsDeleteTodoModalOpened, setDeleteTodoId, setIsUpdateTodoModalOpened, setUpdatedTodo}) => {
 
     const {priority, description, id} = todo
     const [isCompleted, setIsCompleted] = useState<boolean>(todo.completed)
@@ -44,7 +46,9 @@ const ToDo : FC < ToDoProps > = ({todo, setIsDeleteTodoModalOpened, setDeleteTod
             <div>
                 <div className="content">{description}</div>
                 <div className="icons">
-                    <BiSolidPencil size={25} color="black"/>
+                    <div onClick={() => {setIsUpdateTodoModalOpened(true); setUpdatedTodo(todo)}}>
+                        <BiSolidPencil size={25} color="black"/>
+                    </div>
                     <div
                         onClick={() => {
                         setIsDeleteTodoModalOpened(true);

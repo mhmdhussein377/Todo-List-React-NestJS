@@ -8,6 +8,7 @@ import CircularButton from "../../components/UI/CircularButton/CircularButton"
 import {getRequest} from "../../utils/requests"
 import {Todo} from "../../utils/types"
 import DeleteTodoModal from "../../components/DeleteTodoModal/DeleteTodoModal"
+import UpdateTodoModal from "../../components/UpdateTodoModal/UpdateTodoModal"
 
 const Home : FC = () => {
 
@@ -15,10 +16,11 @@ const Home : FC = () => {
         setIsCreateTodoModalOpened] = useState < boolean > (false)
     const [isDeleteTodoModalOpened,
         setIsDeleteTodoModalOpened] = useState < boolean > (false)
+    const [isUpdateTodoModalOpened, setIsUpdateTodoModalOpened] = useState<boolean>(false)
     const [todos,
         setTodos] = useState({})
-    const [deleteTodoId,
-        setDeleteTodoId] = useState < string | null > (null);
+    const [deleteTodoId, setDeleteTodoId] = useState < string | null > (null);
+    const [udpatedTodo, setUpdatedTodo] = useState<Todo | null>(null)
 
     useEffect(() => {
         const getTodos = async() => {
@@ -84,17 +86,21 @@ const Home : FC = () => {
                         date={date}
                         todos={tasksForDate as Todo[]}
                         setIsDeleteTodoModalOpened={setIsDeleteTodoModalOpened}
-                        setDeleteTodoId={setDeleteTodoId}/>))}
+                        setIsUpdateTodoModalOpened={setIsUpdateTodoModalOpened}
+                        setDeleteTodoId={setDeleteTodoId}
+                        setUpdatedTodo={setUpdatedTodo}/>))}
             </div>
             <div className="action-buttons">
                 {circularButtons.map(({id, icon, handleClick}) => (<CircularButton key={id} onClick={handleClick} icon={icon}/>))}
             </div>
-            {isCreateTodoModalOpened && <CreateToDo setIsCreateTodoModalOpened={setIsCreateTodoModalOpened}/>}
+            {isCreateTodoModalOpened && 
+            <CreateToDo setIsCreateTodoModalOpened={setIsCreateTodoModalOpened}/>}
             {isDeleteTodoModalOpened && <DeleteTodoModal
                 deleteTodoId={deleteTodoId}
                 setDeleteTodoId={setDeleteTodoId}
                 setTodos={setTodos}
                 setIsDeleteTodoModalOpened={setIsDeleteTodoModalOpened}/>}
+            {isUpdateTodoModalOpened && <UpdateTodoModal setIsUpdateTodoModalOpened={setIsUpdateTodoModalOpened} updatedTodo={udpatedTodo} />}
         </div>
     )
 }

@@ -3,13 +3,14 @@ import ToDo from "../ToDo/ToDo"
 import "./index.css"
 import { ToDosProps } from "../../utils/types"
 
-const ToDos: FC<ToDosProps> = ({date, todos, setIsDeleteTodoModalOpened, setDeleteTodoId}) => {
+const ToDos: FC<ToDosProps> = ({date, todos, setIsDeleteTodoModalOpened, setDeleteTodoId, setIsUpdateTodoModalOpened, setUpdatedTodo}) => {
 
     return (
         <div className="todos">
             <h2>{date}</h2>
             {todos.map((todo, index) => (
-                <ToDo key={index} todo={todo} setIsDeleteTodoModalOpened={setIsDeleteTodoModalOpened} setDeleteTodoId={setDeleteTodoId} />
+                <ToDo key={index} todo={todo} setIsDeleteTodoModalOpened={setIsDeleteTodoModalOpened}
+                setIsUpdateTodoModalOpened={setIsUpdateTodoModalOpened} setDeleteTodoId={setDeleteTodoId} setUpdatedTodo={setUpdatedTodo} />
             ))}
         </div>
     )

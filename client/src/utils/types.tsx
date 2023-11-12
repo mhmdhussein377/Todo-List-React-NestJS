@@ -13,4 +13,5 @@ export type ToDosProps = {
     todos: Todo[];
     setIsDeleteTodoModalOpened: (value: boolean) => void;
     setDeleteTodoId: (id: number) => void;
+    setIsUpdateTodoModalOpened: (value: boolean) => void;
 };
