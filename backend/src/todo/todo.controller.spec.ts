@@ -76,6 +76,21 @@ describe('UsersController', () => {
             expect(result).toEqual(mockUnauthorizedResult);
             expect(service.deleteTodo).toHaveBeenCalledWith(userId, unauthorizedTodoId);
         });
+
+        it('should handle todo not found during deletion', async () => {
+            const userId = 1;
+            const nonExistentTodoId = 43;
+            const mockNotFoundResult = { status: 404, message: 'Todo not found' };
+
+            jest.spyOn(service, 'deleteTodo').mockResolvedValue(mockNotFoundResult);
+
+            const result = await controller.deleteTodo({ user: { id: userId } }, nonExistentTodoId.toString());
+
+            expect(result).toBeDefined();
+            expect(result).toEqual(mockNotFoundResult);
+            expect(service.deleteTodo).toHaveBeenCalledWith(userId, nonExistentTodoId);
+        });
+
     });
 
 });
