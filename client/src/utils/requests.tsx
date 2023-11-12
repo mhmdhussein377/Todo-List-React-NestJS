@@ -46,7 +46,6 @@ const makeRequest = async(method: string, url: string, data = null, errorHandler
         if (errorHandler && error instanceof Error) {
             errorHandler(error)
         }
-        console.error("Unexpected error: ", error)
         return null
     }
 }

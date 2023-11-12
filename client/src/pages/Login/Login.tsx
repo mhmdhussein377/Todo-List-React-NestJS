@@ -1,10 +1,12 @@
 import {FC, useState} from "react";
 import Input from "../../components/UI/Input/Input";
 import "./index.css";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import Button from "../../components/UI/Button/Button";
-import { useAuth } from "../../Context/AuthContext";
+import {useAuth} from "../../Context/AuthContext";
+import {showError} from "../../utils/showError";
+import { postRequest } from "../../utils/requests";
 
 const inputFields = [
     {
@@ -22,7 +24,9 @@ const inputFields = [
 
 const Login : FC = () => {
 
-    const [inputs, setInputs] = useState({email: "", password: ""})
+    const [inputs, setInputs] = useState < { email: string, password: string} > ({email: "", password: ""})
+    const [error, setError] = useState <{isError: boolean, name: string, message: string}> 
+    ({isError: false, name: "", message: ""})
     const navigate = useNavigate()
     const {login} = useAuth()
     localStorage.removeItem("authToken")
@@ -38,19 +42,27 @@ const Login : FC = () => {
     const handleSubmit = async(event : React.FormEvent) => {
         event.preventDefault()
 
-        try {
-            const response = await axios.post("/auth/login", inputs)
+        const {email, password} = inputs
 
-            if(response) {
-                login(response.data.user)
-            }
+        if (!email || !password) {
+            showError("Missing fields", "All fields are required", setError)
+            return
+        }
 
-            response && localStorage.setItem("authToken", response.data.token)
-            response && navigate("/")
-        } catch (error) {
-            console.error("Login failed:", error)
+        const handleError = () => {
+            showError("Wrong credentials", "Wrong credentials", setError)
+        }
+
+        const response = await postRequest("/auth/login", inputs, handleError)
+
+        if (response) {
+            const {user, token} = response
+            login(user, token)
+            navigate("/")
         }
     }
+
+    console.log(error)
 
     return (
         <div className="login-screen">
@@ -63,8 +75,12 @@ const Login : FC = () => {
                         value={inputs[name] || ""}
                         placeholder={placeholder}
                         name={name}
-                        required={true}
                         onChange={e => handleInputChange(name, e.target.value)}/>))}
+                    <div className="to-register">
+                        Don't have an account?
+                        <Link to="/register">Register</Link>
+                    </div>
+                    {error.isError && <p className="error">{error.message}</p>}
                 </div>
                 <Button content="Login"/>
             </form>

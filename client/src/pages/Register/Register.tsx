@@ -2,8 +2,9 @@ import Input from "../../components/UI/Input/Input";
 import "./index.css";
 import {FC, useState} from "react";
 import { postRequest } from "../../utils/requests";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/UI/Button/Button";
+import { showError } from "../../utils/showError";
 
 const inputFields = [
     {
@@ -29,6 +30,7 @@ export type InputsType = {name: string, email: string, password: string}
 const Register : FC = () => {
 
     const [inputs, setInputs] = useState<InputsType>({name: "", email: "", password: ""})
+    const [error, setError] = useState<{isError: boolean, name: string, message: string}>({isError: false, name: "", message: ""})
     const navigate = useNavigate()
     localStorage.removeItem("authToken")
     localStorage.removeItem("user")
@@ -40,14 +42,23 @@ const Register : FC = () => {
     const handleSubmit = async (event : React.FormEvent) => {
       event.preventDefault()
 
-      const handleErros = (errors) => console.log(errors)
-
-      try {
-        const response = await postRequest("/auth/register", inputs, handleErros)
-        response && navigate("/login")
-      } catch (error) {
-        console.log(error)
+      const {name, email, password} = inputs
+      if(!name || !email || !password) {
+        showError("Missing fields", "All fields are required", setError)
+        return
       }
+
+      if(password.length < 6 || password.length > 20) {
+        showError("Password length", "Password must be 6-20 characters", setError)
+        return
+      }
+
+      const handleError = () => {
+        showError("Email exists", "Email already exists", setError)
+      }
+
+        const response = await postRequest("/auth/register", inputs, handleError)
+        response && navigate("/login")
     }
 
     return (
@@ -63,6 +74,10 @@ const Register : FC = () => {
                         name={name}
                         onChange={e => handleInputChange(name, e.target.value)}/>
                       ))}
+                      {error.isError && <p className="error">{error.message}</p>}
+                      <div className="to-login">
+                        Already have an account? <Link to="/login">Login</Link>
+                      </div>
                 </div>
                 <Button content="Register"/>
             </form>

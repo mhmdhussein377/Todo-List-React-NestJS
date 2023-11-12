@@ -20,9 +20,10 @@ export const AuthProvider: FC = ({children}) => {
     const [user,
         setUser] = useState<User | null>(storedUser);
 
-    const login = (userData) => {
+    const login = (userData, token) => {
         setUser(userData);
         localStorage.setItem('user', JSON.stringify(userData))
+        localStorage.setItem("authToken", token)
     };
 
     const logout = () => {
