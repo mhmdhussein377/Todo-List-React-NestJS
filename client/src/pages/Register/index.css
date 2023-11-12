@@ -3,6 +3,7 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    padding: 0 20px;
     background-color:  #1242f085;
 }
 
@@ -13,6 +14,12 @@
     flex-direction: column;
     gap: 35px;
     background-color: white;
+}
+
+@media (max-width: 500px) {
+    .register-screen > form {
+        padding: 20px;
+    }
 }
 
 .register-screen > form .inputs {

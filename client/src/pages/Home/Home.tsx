@@ -9,6 +9,8 @@ import {getRequest} from "../../utils/requests"
 import {Todo} from "../../utils/types"
 import DeleteTodoModal from "../../components/DeleteTodoModal/DeleteTodoModal"
 import UpdateTodoModal from "../../components/UpdateTodoModal/UpdateTodoModal"
+import { PiSignOutBold } from "react-icons/pi"
+import { useNavigate } from "react-router-dom"
 
 const Home : FC = () => {
 
@@ -23,6 +25,7 @@ const Home : FC = () => {
     const [udpatedTodo, setUpdatedTodo] = useState<Todo | null>(null)
     const [shouldFetchTodos, setShouldFetchTodos] = useState(true);
     const [showCompleted, setShowCompleted] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const getTodos = async() => {
@@ -98,6 +101,11 @@ const Home : FC = () => {
         }
     ];
 
+    const handleSignout = () => {
+        localStorage.removeItem("authToken")
+        navigate("/login")
+    }
+
     return (
         <div className="home-screen">
             <div className="todos-section">
@@ -113,7 +121,10 @@ const Home : FC = () => {
                         setUpdatedTodo={setUpdatedTodo}/>))}
             </div>
             <div className="action-buttons">
+                <CircularButton onClick={handleSignout} icon={<PiSignOutBold size={25} color="white" />} />
+                <div className="flex">
                 {circularButtons.map(({id, icon, handleClick}) => (<CircularButton key={id} onClick={handleClick} icon={icon}/>))}
+                </div>
             </div>
             {isCreateTodoModalOpened && 
             <CreateToDo setIsCreateTodoModalOpened={setIsCreateTodoModalOpened} setShouldFetchTodos={setShouldFetchTodos}/>}
