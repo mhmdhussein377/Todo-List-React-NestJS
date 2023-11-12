@@ -37,4 +37,17 @@ describe("Input component", () => {
         )
     })
 
+    test("renders as a required input when 'required' prop is provided", () => {
+        render(<Input
+            label="Email"
+            type="text"
+            value=""
+            placeholder="Enter your email"
+            name="username"
+            onChange={() => {}}
+            required/>);
+
+        expect(screen.getAllByLabelText("Email")).toBeRequired()
+    })
+
 });
