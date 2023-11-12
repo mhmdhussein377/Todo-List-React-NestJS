@@ -3,6 +3,7 @@ import { TodoController } from './todo.contoller';
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { Priority } from '@prisma/client';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 
 describe('UsersController', () => {
     let controller : TodoController;
@@ -91,6 +92,34 @@ describe('UsersController', () => {
             expect(service.deleteTodo).toHaveBeenCalledWith(userId, nonExistentTodoId);
         });
 
+    });
+
+    describe('updateTodo', () => {
+        it('should update a new todo', async () => {
+            const userId = 1;
+            const todoId = 41;
+            const updateTodoDto: UpdateTodoDto = {
+                description: 'updated',
+            };
+            const mockTodoResult = {
+                id: todoId,
+                description: 'updated',
+                priority: Priority.LOW,
+                completed: false,
+                date: new Date('2023-11-12T18:37:20.431Z'),
+                createdAt: new Date('2023-11-12T18:37:27.089Z'),
+                userId: 1,
+            };
+            jest.spyOn(service, 'updateTodo').mockResolvedValue(mockTodoResult);
+    
+            const result = await controller.updateTodo({ user: { id: userId } }, todoId.toString(), updateTodoDto);
+    
+            expect(result).toBeDefined();
+    
+            expect(result).toEqual(mockTodoResult);
+    
+            expect(service.updateTodo).toHaveBeenCalledWith(userId, todoId.toString(), updateTodoDto);
+        });
     });
 
 });

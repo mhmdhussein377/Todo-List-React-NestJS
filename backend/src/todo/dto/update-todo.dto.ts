@@ -16,5 +16,5 @@ export class UpdateTodoDto {
 
     @IsOptional()
     @IsISO8601()
-    date?: string;
+    date?: Date;
 }
