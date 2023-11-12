@@ -7,13 +7,25 @@ describe("Input component", () => {
     test("renders Input component", () => {
         render(<Input
             label="Email"
-            type="text"
+            type="email"
+            value=""
+            placeholder="Enter your email"
+            name="email"
+            onChange={() => {}}/>);
+
+        expect(screen.getByLabelText("Email")).toBeInTheDocument()
+    })
+
+    test("renders Input component", () => {
+        render(<Input
+            label="Email"
+            type="email"
             value=""
             placeholder="Enter your email"
             name="username"
             onChange={() => {}}/>);
 
-        expect(screen.getAllByLabelText("Email")).toBeInTheDocument()
+        expect(screen.getByLabelText("Email")).toHaveAttribute("type", "email")
     })
 
     test("renders with the correct label and placeholder", () => {
@@ -60,7 +72,7 @@ describe("Input component", () => {
             onChange={() => {}}
             required/>);
 
-        expect(screen.getAllByLabelText("Email")).toBeRequired()
+        expect(screen.getByLabelText("Email")).toBeRequired()
     })
 
 });
