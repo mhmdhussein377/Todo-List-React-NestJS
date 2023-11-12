@@ -62,6 +62,20 @@ describe('UsersController', () => {
             expect(result).toEqual(mockDeleteResult);
             expect(service.deleteTodo).toHaveBeenCalledWith(userId, todoId);
         });
+
+        it('should handle unauthorized deletion', async () => {
+            const userId = 1;
+            const unauthorizedTodoId = 42;
+            const mockUnauthorizedResult = { status: 401, message: 'You are not authorized to delete this todo' };
+
+            jest.spyOn(service, 'deleteTodo').mockResolvedValue(mockUnauthorizedResult);
+
+            const result = await controller.deleteTodo({ user: { id: userId } }, unauthorizedTodoId.toString());
+
+            expect(result).toBeDefined();
+            expect(result).toEqual(mockUnauthorizedResult);
+            expect(service.deleteTodo).toHaveBeenCalledWith(userId, unauthorizedTodoId);
+        });
     });
 
 });
