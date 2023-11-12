@@ -3,6 +3,19 @@ import "@testing-library/jest-dom";
 import Input from "./Input";
 
 describe("Input component", () => {
+
+    test("renders Input component", () => {
+        render(<Input
+            label="Email"
+            type="text"
+            value=""
+            placeholder="Enter your email"
+            name="username"
+            onChange={() => {}}/>);
+
+        expect(screen.getAllByLabelText("Email")).toBeInTheDocument()
+    })
+
     test("renders with the correct label and placeholder", () => {
         const label = "Username";
         const placeholder = "Enter your username";
