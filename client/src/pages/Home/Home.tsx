@@ -21,6 +21,8 @@ const Home : FC = () => {
         setTodos] = useState({})
     const [deleteTodoId, setDeleteTodoId] = useState < string | null > (null);
     const [udpatedTodo, setUpdatedTodo] = useState<Todo | null>(null)
+    const [shouldFetchTodos, setShouldFetchTodos] = useState(true);
+    const [showCompleted, setShowCompleted] = useState(false)
 
     useEffect(() => {
         const getTodos = async() => {
@@ -47,28 +49,48 @@ const Home : FC = () => {
                     });
                 }
 
-                setTodos(groupedTasks)
+                const filteredTodos = showCompleted ? filterCompletedTasks(groupedTasks) : groupedTasks
+
+                setTodos(filteredTodos)
 
             } catch (error) {
                 console.log(error)
             }
         }
-        getTodos()
-    }, [todos])
+        if(shouldFetchTodos) {
+            getTodos()
+            setShouldFetchTodos(false)
+        }
+    }, [shouldFetchTodos, showCompleted])
 
     const handleOpenCreateTodoModal = () : void => {
         setIsCreateTodoModalOpened(true)
     }
 
-    const handleSortByTime = () => {
-
+    const handleToggleCompleted = () => {
+        setShowCompleted((prevShowCompleted) => !prevShowCompleted);
+        setShouldFetchTodos(true)
     }
+
+    const filterCompletedTasks = (tasks) => {
+        const filteredTasks = {};
+    
+        for (const date in tasks) {
+            const completedTasks = tasks[date].filter(task => task.completed);
+            if (completedTasks.length > 0) {
+                filteredTasks[date] = completedTasks;
+            }
+        }
+    
+        return filteredTasks;
+    };
+    
 
     const circularButtons = [
         {
             id: 1,
             icon: <GiBackwardTime size={25} color="white"/>,
-            handleClick: handleSortByTime
+            handleClick: handleToggleCompleted
         }, {
             id: 2,
             icon: <AiOutlinePlus size={25} color="white"/>,
@@ -94,13 +116,14 @@ const Home : FC = () => {
                 {circularButtons.map(({id, icon, handleClick}) => (<CircularButton key={id} onClick={handleClick} icon={icon}/>))}
             </div>
             {isCreateTodoModalOpened && 
-            <CreateToDo setIsCreateTodoModalOpened={setIsCreateTodoModalOpened}/>}
+            <CreateToDo setIsCreateTodoModalOpened={setIsCreateTodoModalOpened} setShouldFetchTodos={setShouldFetchTodos}/>}
             {isDeleteTodoModalOpened && <DeleteTodoModal
                 deleteTodoId={deleteTodoId}
                 setDeleteTodoId={setDeleteTodoId}
                 setTodos={setTodos}
+                setShouldFetchTodos={setShouldFetchTodos}
                 setIsDeleteTodoModalOpened={setIsDeleteTodoModalOpened}/>}
-            {isUpdateTodoModalOpened && <UpdateTodoModal setIsUpdateTodoModalOpened={setIsUpdateTodoModalOpened} updatedTodo={udpatedTodo} />}
+            {isUpdateTodoModalOpened && <UpdateTodoModal setIsUpdateTodoModalOpened={setIsUpdateTodoModalOpened} updatedTodo={udpatedTodo} setShouldFetchTodos={setShouldFetchTodos} />}
         </div>
     )
 }

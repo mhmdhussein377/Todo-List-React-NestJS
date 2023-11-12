@@ -2,12 +2,12 @@ import { deleteRequest } from "../../utils/requests"
 import Button from "../UI/Button/Button"
 import "./index.css"
 
-const DeleteTodoModal = ({setDeleteTodoId, setIsDeleteTodoModalOpened, deleteTodoId, setTodos}) => {
+const DeleteTodoModal = ({setDeleteTodoId, setIsDeleteTodoModalOpened, deleteTodoId, setShouldFetchTodos}) => {
 
     const handleDeleteTodo = async () => {
         try {
             const response = await deleteRequest(`/todos/${deleteTodoId}/delete`)
-            response && setIsDeleteTodoModalOpened(false)
+            response && setIsDeleteTodoModalOpened(false) && setShouldFetchTodos(true)
         } catch (error) {
             console.log(error)
         }

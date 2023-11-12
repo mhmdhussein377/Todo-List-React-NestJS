@@ -5,8 +5,9 @@ import SelectSearch from "react-select-search"
 
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-select-search/style.css'
-import {postRequest, updateRequest} from "../../utils/requests";
+import {updateRequest} from "../../utils/requests";
 import Button from "../UI/Button/Button";
+import { Todo } from '../../utils/types';
 
 const options = [
     {
@@ -23,9 +24,11 @@ const options = [
 
 type Props = {
     setIsUpdateTodoModalOpened: (arg0: boolean) => void;
+    updatedTodo: (arg0: Todo) => void;
+    setShouldFetchTodos: (arg0: boolean) => void;
 }
 
-const UpdateTodoModal: FC<Props> = ({setIsUpdateTodoModalOpened, updatedTodo}) => {
+const UpdateTodoModal: FC<Props> = ({setIsUpdateTodoModalOpened, updatedTodo, setShouldFetchTodos}) => {
 
     const [inputs, setInputs] = useState({description: updatedTodo.description, date: new Date(), priority: updatedTodo.priority})
     const [error, setError] = useState(false)
@@ -75,6 +78,7 @@ const UpdateTodoModal: FC<Props> = ({setIsUpdateTodoModalOpened, updatedTodo}) =
                 date: inputs.date.toISOString(),
             })
 
+            response && setShouldFetchTodos(true)
             response && setIsUpdateTodoModalOpened(false)
 
         } catch (error) {

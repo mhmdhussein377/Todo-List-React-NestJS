@@ -33,7 +33,7 @@ const options = [
     }
 ];
 
-const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened}) => {
+const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened, setShouldFetchTodos}) => {
 
     const [inputs,
         setInputs] = useState<InputsType>({description: "", date: new Date(), priority: "LOW"})
@@ -85,6 +85,7 @@ const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened}) => {
                 completed: false
             })
 
+            response && setShouldFetchTodos(true)
             response && setIsCreateTodoModalOpened(false)
 
         } catch (error) {
