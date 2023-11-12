@@ -37,9 +37,11 @@ export class AuthService {
       throw new ForbiddenException()
     }
 
+    const {password: pass, ...others} = existedUser
+
     res.cookie('token', token)
 
-    return res.send({message: 'Logged in successfully', token})
+    return res.send({message: 'Logged in successfully', token, user: others})
   }
 
   async register(dto: RegisterUserDto): Promise<any> {

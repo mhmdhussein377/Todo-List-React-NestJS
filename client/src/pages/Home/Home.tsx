@@ -1,5 +1,5 @@
 import "./index.css"
-import {FC, useEffect, useState} from "react"
+import {FC, useContext, useEffect, useState} from "react"
 import ToDos from "../../components/ToDos/ToDos"
 import {AiOutlinePlus} from "react-icons/ai"
 import {GiBackwardTime} from "react-icons/gi"
@@ -11,6 +11,7 @@ import DeleteTodoModal from "../../components/DeleteTodoModal/DeleteTodoModal"
 import UpdateTodoModal from "../../components/UpdateTodoModal/UpdateTodoModal"
 import { PiSignOutBold } from "react-icons/pi"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "../../Context/AuthContext"
 
 const Home : FC = () => {
 
@@ -26,6 +27,7 @@ const Home : FC = () => {
     const [shouldFetchTodos, setShouldFetchTodos] = useState(true);
     const [showCompleted, setShowCompleted] = useState(false)
     const navigate = useNavigate()
+    const {logout} = useAuth()
 
     useEffect(() => {
         const getTodos = async() => {
@@ -102,7 +104,7 @@ const Home : FC = () => {
     ];
 
     const handleSignout = () => {
-        localStorage.removeItem("authToken")
+        logout()
         navigate("/login")
     }
 

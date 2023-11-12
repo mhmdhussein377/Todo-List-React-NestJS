@@ -30,6 +30,8 @@ const Register : FC = () => {
 
     const [inputs, setInputs] = useState<InputsType>({name: "", email: "", password: ""})
     const navigate = useNavigate()
+    localStorage.removeItem("authToken")
+    localStorage.removeItem("user")
 
     const handleInputChange = (name: string, value: string) => {
       setInputs(prev => ({...prev, [name]: value}))

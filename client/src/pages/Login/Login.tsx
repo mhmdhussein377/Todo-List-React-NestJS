@@ -4,6 +4,7 @@ import "./index.css";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import Button from "../../components/UI/Button/Button";
+import { useAuth } from "../../Context/AuthContext";
 
 const inputFields = [
     {
@@ -23,6 +24,9 @@ const Login : FC = () => {
 
     const [inputs, setInputs] = useState({email: "", password: ""})
     const navigate = useNavigate()
+    const {login} = useAuth()
+    localStorage.removeItem("authToken")
+    localStorage.removeItem("user")
 
     const handleInputChange = (name : string, value : string) => {
         setInputs(prev => ({
@@ -36,6 +40,10 @@ const Login : FC = () => {
 
         try {
             const response = await axios.post("/auth/login", inputs)
+
+            if(response) {
+                login(response.data.user)
+            }
 
             response && localStorage.setItem("authToken", response.data.token)
             response && navigate("/")
