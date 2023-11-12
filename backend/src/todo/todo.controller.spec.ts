@@ -47,4 +47,21 @@ describe('UsersController', () => {
             expect(service.createTodo).toHaveBeenCalledWith(userId, createTodoDto);
         });
     });
+
+    describe('deleteTodo', () => {
+        it('should delete a todo', async () => {
+            const userId = 1;
+            const todoId = 41;
+            const mockDeleteResult = { status: 200, message: 'Item deleted successfully' };
+
+            jest.spyOn(service, 'deleteTodo').mockResolvedValue(mockDeleteResult);
+
+            const result = await controller.deleteTodo({ user: { id: userId } }, todoId.toString());
+
+            expect(result).toBeDefined();
+            expect(result).toEqual(mockDeleteResult);
+            expect(service.deleteTodo).toHaveBeenCalledWith(userId, todoId);
+        });
+    });
+
 });
