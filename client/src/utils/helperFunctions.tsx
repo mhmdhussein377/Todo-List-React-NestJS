@@ -34,3 +34,14 @@ export const filterCompletedTodos = (tasks) => {
 
     return filteredTasks;
 };
+
+export const filteredTodosBySearchTerm = (todos, searchTerm) => {
+    return todos.filter((todo) => {
+        const todoDate = new Date(todo.date).toLocaleDateString();
+    
+        return (
+            todoDate.includes(searchTerm) ||
+            todo.description.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    })
+}

@@ -11,7 +11,7 @@ import {updateRequest} from "../../utils/requests"
 type ToDoProps = {
     todo: Todo;
     setIsDeleteTodoModalOpened: (value : boolean) => void;
-    setDeleteTodoId: (id : number) => void;
+    setDeleteTodoId: (value: number) => void;
     setIsUpdateTodoModalOpened: (value : boolean) => void;
     setUpdatedTodo: (todo : Todo) => void;
 }

@@ -11,7 +11,9 @@ import { PiSignOutBold } from "react-icons/pi"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../Context/AuthContext"
 import { getCircularButtons } from "../../utils/constants"
-import { filterCompletedTodos, groupAndSortTasks } from "../../utils/helperFunctions"
+import { filterCompletedTodos, filteredTodosBySearchTerm, groupAndSortTasks } from "../../utils/helperFunctions"
+import { useDebounce } from "use-debounce"
+import ToDo from "../../components/ToDo/ToDo"
 
 const Home : FC = () => {
 
@@ -21,6 +23,9 @@ const Home : FC = () => {
         setIsDeleteTodoModalOpened] = useState < boolean > (false)
     const [isUpdateTodoModalOpened, setIsUpdateTodoModalOpened] = useState<boolean>(false)
     const [todos, setTodos] = useState({})
+    const [searchTerm, setSearchTerm] = useState<string>("")
+    const [debouncedValue] = useDebounce(searchTerm, 500);
+    const [searchTodos, setSearchedTodos] = useState([])
     const [deleteTodoId, setDeleteTodoId] = useState < string | null > (null);
     const [udpatedTodo, setUpdatedTodo] = useState<Todo | null>(null)
     const [shouldFetchTodos, setShouldFetchTodos] = useState(true);
@@ -45,6 +50,22 @@ const Home : FC = () => {
         }
     }, [shouldFetchTodos, showCompleted])
 
+    useEffect(() => {
+        if(!debouncedValue) {
+            setSearchedTodos([])
+            return
+        }
+
+        const getTodos = async() => {
+            const response = await getRequest("/todos/all")
+
+            const filteredTodos = filteredTodosBySearchTerm(response, debouncedValue)
+
+            setSearchedTodos(filteredTodos)
+        }
+        getTodos()
+    }, [debouncedValue, searchTerm])
+
     const handleOpenCreateTodoModal = () : void => {
         setIsCreateTodoModalOpened(true)
     }
@@ -64,7 +85,12 @@ const Home : FC = () => {
     return (
         <div className="home-screen">
             <div className="todos-section">
-                {Object
+                <input className="search-input" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} type="text" placeholder="Search for todos" />
+                {
+                    searchTodos.length > 0 ?
+                    searchTodos.map((todo, index) => (
+                        <ToDo key={index} todo={todo} setDeleteTodoId={setDeleteTodoId} setIsDeleteTodoModalOpened={setIsDeleteTodoModalOpened} setUpdatedTodo={setUpdatedTodo} setIsUpdateTodoModalOpened={setIsUpdateTodoModalOpened} />
+                    )) :  Object
                     .entries(todos)
                     .map(([date, tasksForDate]) => (<ToDos
                         key={date}
@@ -73,7 +99,8 @@ const Home : FC = () => {
                         setIsDeleteTodoModalOpened={setIsDeleteTodoModalOpened}
                         setIsUpdateTodoModalOpened={setIsUpdateTodoModalOpened}
                         setDeleteTodoId={setDeleteTodoId}
-                        setUpdatedTodo={setUpdatedTodo}/>))}
+                        setUpdatedTodo={setUpdatedTodo}/>))
+                }
             </div>
             <div className="action-buttons">
                 <CircularButton onClick={handleSignout} icon={<PiSignOutBold size={25} color="white" />} />
