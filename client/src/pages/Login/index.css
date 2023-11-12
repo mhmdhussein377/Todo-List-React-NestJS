@@ -36,6 +36,7 @@
     color: var(--main-color);
     font-weight: 500;
     font-size: 1.0625rem;
+    margin-left: .5rem;
 }
 
 .login-screen > form .error {

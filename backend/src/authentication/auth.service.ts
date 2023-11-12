@@ -1,11 +1,9 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'prisma/prisma.service';
-import { UserService } from 'src/user/users.service';
 import { LoginDto } from './dto/login-user.dto';
 import * as bcrypt from 'bcrypt';
 import { RegisterUserDto } from './dto/register-user.dto';
-import { User } from 'src/user/user.model';
 import { Request, Response } from 'express';
 
 @Injectable()
@@ -13,7 +11,6 @@ export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
     private jwtService: JwtService,
-    private readonly userService: UserService,
   ) {}
 
   async login(dto: LoginDto, req: Request, res: Response): Promise<any> {
@@ -66,10 +63,10 @@ export class AuthService {
     return { status: 200, message: 'Signup was successfull' };
   }
 
-  async signout(req: Request, res: Response): Promise<any> {
-    res.clearCookie("token")
-    return res.send({message: "Logged out successfully"})
-  }
+  // async signout(req: Request, res: Response): Promise<any> {
+  //   res.clearCookie("token")
+  //   return res.send({message: "Logged out successfully"})
+  // }
 
   async hashPassword(password: string) {
     const saltOrRounds = 10

@@ -18,8 +18,8 @@ export class AuthController {
         return this.authService.register(dto)
     }
 
-    @Get("signout")
-    signout(@Req() req, @Res() res) {
-        return this.authService.signout(req, res)
-    }
+    // @Get("signout")
+    // signout(@Req() req, @Res() res) {
+    //     return this.authService.signout(req, res)
+    // }
 }

@@ -64,11 +64,11 @@ const Login : FC = () => {
                         placeholder={placeholder}
                         name={name}
                         onChange={e => handleInputChange(name, e.target.value)}/>))}
+                    {error.isError && <p className="error">{error.message}</p>}
                     <div className="to-register">
                         Don't have an account?
                         <Link to="/register">Register</Link>
                     </div>
-                    {error.isError && <p className="error">{error.message}</p>}
                 </div>
                 <Button content="Login"/>
             </form>
