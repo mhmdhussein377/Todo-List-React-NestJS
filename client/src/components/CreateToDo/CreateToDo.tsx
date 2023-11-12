@@ -9,9 +9,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import 'react-select-search/style.css'
 import {postRequest} from "../../utils/requests";
 import Button from "../UI/Button/Button";
+import { priorityOptions } from "../../utils/constants";
+import { handleCloseModal } from "../../utils/closeModal";
 
 interface propsType {
     setIsCreateTodoModalOpened : React.Dispatch < React.SetStateAction < boolean >>;
+    setShouldFetchTodos: (value: boolean) => void;
 }
 
 export type InputsType = {
@@ -20,19 +23,6 @@ export type InputsType = {
     priority: string
 }
 
-const options = [
-    {
-        name: 'Low',
-        value: 'LOW'
-    }, {
-        name: 'Medium',
-        value: 'MEDIUM'
-    }, {
-        name: "High",
-        value: "HIGH"
-    }
-];
-
 const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened, setShouldFetchTodos}) => {
 
     const [inputs,
@@ -40,7 +30,7 @@ const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened, setShouldFet
     const [error, setError] = useState<boolean>(false)
     const formRef = useRef < HTMLFormElement > (null)
 
-    const handleChange = (name : string, value : string) => {
+    const handleChange = (name : string, value : string | Date) => {
         setInputs(prev => ({
             ...prev,
             [name]: value
@@ -48,23 +38,12 @@ const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened, setShouldFet
     }
 
     const closeModal = (event : React.MouseEvent < HTMLDivElement >) => {
-        if (!formRef.current?.contains(event.target as HTMLDivElement)) 
-            setIsCreateTodoModalOpened(false)
+        handleCloseModal(event, formRef, setIsCreateTodoModalOpened)
     }
 
-    const handlePriorityChange = (newValue : string) : void => {
-        setInputs(prev => ({
-            ...prev,
-            priority: newValue
-        }))
-    }
+    const handlePriorityChange = (newValue : string) => handleChange("priority", newValue)
 
-    const handleDateChange = (newDate) : void => {
-        setInputs(prev => ({
-            ...prev,
-            date: newDate
-        }))
-    }
+    const handleDateChange = (date: Date) => handleChange("date", date)
 
     const handleCreateTodo = async(e : React.FormEvent) => {
         e.preventDefault()
@@ -108,15 +87,14 @@ const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened, setShouldFet
                     <div className="w-50">
                         <div className="input-container date">
                             <label htmlFor="date">Date</label>
-                            <DatePicker selected={inputs.date} onChange={(date) => handleDateChange(date)}/>
+                            <DatePicker selected={inputs.date} onChange={handleDateChange}/>
                         </div>
                         <div className="input-container priority">
                             <label htmlFor="priority">Priority</label>
                             <SelectSearch
-                                onChange={(newValue : string) => handlePriorityChange(newValue)}
-                                options={options}
-                                value={inputs.priority}
-                                placeholder="Low"/>
+                                onChange={handlePriorityChange}
+                                options={priorityOptions}
+                                value={inputs.priority}/>
                         </div>
                     </div>
                 </div>

@@ -1,8 +1,6 @@
 import "./index.css"
-import {FC, useContext, useEffect, useState} from "react"
+import {FC, useEffect, useState} from "react"
 import ToDos from "../../components/ToDos/ToDos"
-import {AiOutlinePlus} from "react-icons/ai"
-import {GiBackwardTime} from "react-icons/gi"
 import CreateToDo from "../../components/CreateToDo/CreateToDo"
 import CircularButton from "../../components/UI/CircularButton/CircularButton"
 import {getRequest} from "../../utils/requests"
@@ -12,6 +10,8 @@ import UpdateTodoModal from "../../components/UpdateTodoModal/UpdateTodoModal"
 import { PiSignOutBold } from "react-icons/pi"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../Context/AuthContext"
+import { getCircularButtons } from "../../utils/constants"
+import { filterCompletedTodos, groupAndSortTasks } from "../../utils/helperFunctions"
 
 const Home : FC = () => {
 
@@ -20,8 +20,7 @@ const Home : FC = () => {
     const [isDeleteTodoModalOpened,
         setIsDeleteTodoModalOpened] = useState < boolean > (false)
     const [isUpdateTodoModalOpened, setIsUpdateTodoModalOpened] = useState<boolean>(false)
-    const [todos,
-        setTodos] = useState({})
+    const [todos, setTodos] = useState({})
     const [deleteTodoId, setDeleteTodoId] = useState < string | null > (null);
     const [udpatedTodo, setUpdatedTodo] = useState<Todo | null>(null)
     const [shouldFetchTodos, setShouldFetchTodos] = useState(true);
@@ -31,37 +30,15 @@ const Home : FC = () => {
 
     useEffect(() => {
         const getTodos = async() => {
-            try {
-                const response = await getRequest("/todos/all")
+        const response = await getRequest("/todos/all")
 
-                const groupedTasks = response.reduce((groups, task) => {
-                    const date = new Date(task.date).toLocaleDateString();
-                    if (!groups[date]) {
-                        groups[date] = [];
-                    }
-                    groups[date].push(task);
-                    return groups;
-                }, {});
+        const groupedAndSortedTodos = groupAndSortTasks(response);
 
-                for (const date in groupedTasks) {
-                    groupedTasks[date].sort((a, b) => {
-                        const priorityOrder = {
-                            HIGH: 1,
-                            MEDIUM: 2,
-                            LOW: 3
-                        };
-                        return priorityOrder[a.priority] - priorityOrder[b.priority];
-                    });
-                }
+        const filteredTodos = showCompleted ? filterCompletedTodos(groupedAndSortedTodos) : groupedAndSortedTodos
 
-                const filteredTodos = showCompleted ? filterCompletedTasks(groupedTasks) : groupedTasks
-
-                setTodos(filteredTodos)
-
-            } catch (error) {
-                console.log(error)
-            }
+        setTodos(filteredTodos)
         }
+
         if(shouldFetchTodos) {
             getTodos()
             setShouldFetchTodos(false)
@@ -72,38 +49,14 @@ const Home : FC = () => {
         setIsCreateTodoModalOpened(true)
     }
 
-    const handleToggleCompleted = () => {
+    const handleToggleCompleted = (): void => {
         setShowCompleted((prevShowCompleted) => !prevShowCompleted);
         setShouldFetchTodos(true)
     }
 
-    const filterCompletedTasks = (tasks) => {
-        const filteredTasks = {};
-    
-        for (const date in tasks) {
-            const completedTasks = tasks[date].filter(task => task.completed);
-            if (completedTasks.length > 0) {
-                filteredTasks[date] = completedTasks;
-            }
-        }
-    
-        return filteredTasks;
-    };
-    
+    const circularButtons = getCircularButtons(handleToggleCompleted, handleOpenCreateTodoModal);
 
-    const circularButtons = [
-        {
-            id: 1,
-            icon: <GiBackwardTime size={25} color="white"/>,
-            handleClick: handleToggleCompleted
-        }, {
-            id: 2,
-            icon: <AiOutlinePlus size={25} color="white"/>,
-            handleClick: handleOpenCreateTodoModal
-        }
-    ];
-
-    const handleSignout = () => {
+    const handleSignout = (): void => {
         logout()
         navigate("/login")
     }
@@ -133,7 +86,6 @@ const Home : FC = () => {
             {isDeleteTodoModalOpened && <DeleteTodoModal
                 deleteTodoId={deleteTodoId}
                 setDeleteTodoId={setDeleteTodoId}
-                setTodos={setTodos}
                 setShouldFetchTodos={setShouldFetchTodos}
                 setIsDeleteTodoModalOpened={setIsDeleteTodoModalOpened}/>}
             {isUpdateTodoModalOpened && <UpdateTodoModal setIsUpdateTodoModalOpened={setIsUpdateTodoModalOpened} updatedTodo={udpatedTodo} setShouldFetchTodos={setShouldFetchTodos} />}

@@ -2,31 +2,19 @@ import {FC, useState} from "react";
 import Input from "../../components/UI/Input/Input";
 import "./index.css";
 import {Link, useNavigate} from "react-router-dom";
-import axios from "axios";
 import Button from "../../components/UI/Button/Button";
 import {useAuth} from "../../Context/AuthContext";
 import {showError} from "../../utils/showError";
 import { postRequest } from "../../utils/requests";
+import { loginInputFields } from "../../utils/constants";
+import { ErrorType } from "../Register/Register";
 
-const inputFields = [
-    {
-        label: "Email",
-        type: "email",
-        placeholder: "Enter your email",
-        name: "email"
-    }, {
-        label: "Password",
-        type: "password",
-        placeholder: "Enter your password",
-        name: "password"
-    }
-];
+type InputsType = { email: string, password: string} 
 
 const Login : FC = () => {
 
-    const [inputs, setInputs] = useState < { email: string, password: string} > ({email: "", password: ""})
-    const [error, setError] = useState <{isError: boolean, name: string, message: string}> 
-    ({isError: false, name: "", message: ""})
+    const [inputs, setInputs] = useState <InputsType> ({email: "", password: ""})
+    const [error, setError] = useState<ErrorType>({isError: false, name: "", message: ""})
     const navigate = useNavigate()
     const {login} = useAuth()
     localStorage.removeItem("authToken")
@@ -68,7 +56,7 @@ const Login : FC = () => {
         <div className="login-screen">
             <form onSubmit={handleSubmit}>
                 <div className="inputs">
-                    {inputFields.map(({name, label, type, placeholder}) => (<Input
+                    {loginInputFields.map(({name, label, type, placeholder}) => (<Input
                         key={name}
                         label={label}
                         type={type}

@@ -3,6 +3,7 @@ import "./index.css"
 
 interface ButtonProps {
     content: string,
+    handleClick?: () => void;
 }
 
 const Button: FC<ButtonProps> = ({content, handleClick}) => {

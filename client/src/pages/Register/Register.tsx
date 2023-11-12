@@ -5,32 +5,16 @@ import { postRequest } from "../../utils/requests";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/UI/Button/Button";
 import { showError } from "../../utils/showError";
-
-const inputFields = [
-    {
-        label: "Name",
-        type: "text",
-        placeholder: "Enter your name",
-        name: "name"
-    }, {
-        label: "Email",
-        type: "email",
-        placeholder: "Enter your email",
-        name: "email"
-    }, {
-        label: "Password",
-        type: "password",
-        placeholder: "Enter your password",
-        name: "password"
-    }
-];
+import { registerInputFields } from "../../utils/constants";
 
 export type InputsType = {name: string, email: string, password: string}
+
+export type ErrorType = {isError: boolean, name: string, message: string}
 
 const Register : FC = () => {
 
     const [inputs, setInputs] = useState<InputsType>({name: "", email: "", password: ""})
-    const [error, setError] = useState<{isError: boolean, name: string, message: string}>({isError: false, name: "", message: ""})
+    const [error, setError] = useState<ErrorType>({isError: false, name: "", message: ""})
     const navigate = useNavigate()
     localStorage.removeItem("authToken")
     localStorage.removeItem("user")
@@ -65,7 +49,7 @@ const Register : FC = () => {
         <div className="register-screen">
             <form onSubmit={handleSubmit}>
                 <div className="inputs">
-                    {inputFields.map(({name, label, type, placeholder}) => (<Input
+                    {registerInputFields.map(({name, label, type, placeholder}) => (<Input
                         key={name}
                         label={label}
                         type={type}
