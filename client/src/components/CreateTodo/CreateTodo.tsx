@@ -23,7 +23,7 @@ export type InputsType = {
     priority: string
 }
 
-const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened, setShouldFetchTodos}) => {
+const CreateTodo : FC < propsType > = ({setIsCreateTodoModalOpened, setShouldFetchTodos}) => {
 
     const [inputs,
         setInputs] = useState<InputsType>({description: "", date: new Date(), priority: "LOW"})
@@ -104,4 +104,4 @@ const CreateToDo : FC < propsType > = ({setIsCreateTodoModalOpened, setShouldFet
     )
 }
 
-export default CreateToDo
+export default CreateTodo

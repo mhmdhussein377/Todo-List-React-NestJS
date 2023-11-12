@@ -8,7 +8,7 @@ import {BsCheckSquareFill} from "react-icons/bs"
 import {Todo} from "../../utils/types"
 import {updateRequest} from "../../utils/requests"
 
-type ToDoProps = {
+type TodoProps = {
     todo: Todo;
     setIsDeleteTodoModalOpened: (value : boolean) => void;
     setDeleteTodoId: (value: number) => void;
@@ -16,7 +16,7 @@ type ToDoProps = {
     setUpdatedTodo: (todo : Todo) => void;
 }
 
-const ToDo : FC < ToDoProps > = ({todo, setIsDeleteTodoModalOpened, setDeleteTodoId, setIsUpdateTodoModalOpened, setUpdatedTodo}) => {
+const ToDo : FC < TodoProps > = ({todo, setIsDeleteTodoModalOpened, setDeleteTodoId, setIsUpdateTodoModalOpened, setUpdatedTodo}) => {
 
     const {priority, description, id} = todo
     const [isCompleted, setIsCompleted] = useState < boolean > (todo.completed)
